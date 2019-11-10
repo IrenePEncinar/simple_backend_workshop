@@ -1,5 +1,5 @@
 const express = require('express')
-const { books } = require('./model')
+const { getAllBooks } = require('./model')
 
 // Create express app and make it listen on port 3000
 const app = express()
@@ -13,5 +13,5 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/books', (req, res) => {
-  res.send(books)
+  getAllBooks((books) => res.send(books))
 })
