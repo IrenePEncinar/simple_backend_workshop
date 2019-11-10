@@ -20,6 +20,14 @@ const getAllBooks = (responseHandler) => {
   })
 }
 
+const createBook = (values, responseHandler) => {
+  db.run('INSERT INTO books (title, author) VALUES (?, ?);', ['El principito', 'Antoine de Saint-Exupéry'], (err) => {
+    if (err) {
+      return console.log(err.message)
+    }
+    responseHandler()
+  })
+}
 
 const books = [
   {
