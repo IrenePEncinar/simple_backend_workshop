@@ -15,13 +15,32 @@ const getAllBooks = (responseHandler) => {
       console.error(err.message)
       throw err
     }
-    console.log(rows)
     responseHandler(rows)
   })
 }
 
 const createBook = (values, responseHandler) => {
-  db.run('INSERT INTO books (title, author) VALUES (?, ?);', ['El principito', 'Antoine de Saint-Exupéry'], (err) => {
+  const { title, author } = values
+  db.run('INSERT INTO books (title, author) VALUES (?, ?);', [title, author], (err) => {
+    if (err) {
+      return console.log(err.message)
+    }
+    responseHandler()
+  })
+}
+
+const updateBook = (id, values, responseHandler) => {
+  const { title, author } = values
+  db.run('UPDATE books SET title = ?, author = ? WHERE id = ?;', [title, author, id], (err) => {
+    if (err) {
+      return console.log(err.message)
+    }
+    responseHandler()
+  })
+}
+
+const deleteBook = (id, responseHandler) => {
+  db.run('DELETE FROM books WHERE id = ?;', [id], (err) => {
     if (err) {
       return console.log(err.message)
     }
@@ -42,4 +61,4 @@ const books = [
   }
 ]
 
-module.exports = { getAllBooks }
+module.exports = { getAllBooks, createBook, updateBook, deleteBook }
