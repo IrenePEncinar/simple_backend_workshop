@@ -1,8 +1,6 @@
 const express = require('express')
-const { getAllBooks, createBook, updateBook, deleteBook, getBook } = require('./model')
-
-// EXTRA
-const basicAuth = require('express-basic-auth')
+const { getAllBooks, createBook, updateBook, deleteBook } = require('./model')
+const { getBook } = require('./model_async')
 
 // Create express app and make it listen on port 3000
 const app = express()
@@ -11,7 +9,8 @@ app.listen(3000, () => {
   console.log('Server is listening on port 3000. Ready to accept requests!')
 })
 
-// EXTRA
+// EXTRA - basic auth
+const basicAuth = require('express-basic-auth')
 app.use(basicAuth({
   users: { 'irene': '1234' }
 }))
@@ -38,7 +37,14 @@ app.delete('/api/books/:id', (req, res) => {
   deleteBook(req.params.id, () => res.send())
 })
 
-// EXTRA
+// EXTRA - get single book
+// With promise
 app.get('/api/books/:id', (req, res) => {
-  getBook(req.params.id, res.send.bind(res))
+  getBook(req.params.id).then(book => res.send(book))
+})
+
+// With async/await
+app.get('/api/books/:id', async (req, res) =>  {
+  const book = await getBook(req.params.id)
+  res.send(book)
 })
