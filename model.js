@@ -48,6 +48,19 @@ const deleteBook = (id, responseHandler) => {
   })
 }
 
+const getBook = (id, responseHandler) => {
+  db.get('SELECT * FROM books WHERE id = ?;', [id], (err, row) => {
+    // process rows here
+    if (err) {
+      console.error(err.message)
+      throw err
+    }
+    console.log(row)
+    responseHandler(row)
+  })
+
+}
+
 const books = [
   {
     id: 1,
@@ -61,4 +74,4 @@ const books = [
   }
 ]
 
-module.exports = { getAllBooks, createBook, updateBook, deleteBook }
+module.exports = { getAllBooks, createBook, updateBook, deleteBook, getBook }
